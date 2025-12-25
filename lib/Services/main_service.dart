@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 
 class Service {
   Service._();
-  static final String dbName = "docbook.db";
+  static final String _dbName = "docbook.db";
   static final String doctorsTable = "doctors";
   static final String patientsTable = "patients";
   static final String appointmentsTable = "appointments";
@@ -13,7 +13,7 @@ class Service {
 
   static Future<void> openDb() async {
     final databasePath = await getDatabasesPath();
-    final path = p.join(databasePath, dbName);
+    final path = p.join(databasePath, _dbName);
     database = await openDatabase(
       path,
       version: 1,

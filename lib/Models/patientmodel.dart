@@ -6,7 +6,7 @@ class PatientModel {
   final String passwordHash;
   final String? dateOfBirth;
   final String? gender;
-  final String profilePicture;
+  final String? profilePicture;
 
   const PatientModel({
     required this.id,
@@ -16,7 +16,7 @@ class PatientModel {
     required this.passwordHash,
     this.dateOfBirth,
     this.gender,
-    this.profilePicture = '',
+    this.profilePicture,
   });
 
   factory PatientModel.fromMap(Map<String, dynamic> json) => PatientModel(

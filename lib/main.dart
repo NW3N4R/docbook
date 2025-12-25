@@ -1,17 +1,10 @@
+import 'package:docbook/Models/doctorsmodel.dart';
+import 'package:docbook/Models/patientmodel.dart';
+import 'package:docbook/Services/doctorshelper.dart';
+import 'package:docbook/Services/patientshelper.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
 import 'package:flutter/material.dart';
 import 'Services/main_service.dart';
-
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DocBook',
-
-      home: const MainApp(),
-    ),
-  );
-}
 
 int currentIndex = 0;
 
@@ -31,7 +24,6 @@ class _MainAppState extends State<MainApp> {
 
   @override
   void initState() {
-    Service.openDb();
     super.initState();
   }
 

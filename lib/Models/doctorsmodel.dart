@@ -26,8 +26,8 @@ class DoctorsModel {
     phone: json['phone'],
     email: json['email'],
     password: json['password_hash'],
-    isAvailable: json['is_Available'],
-    profilePicture: json['profile_Picture'],
+    isAvailable: json['is_available'],
+    profilePicture: json['profile_picture'],
   );
 
   Map<String, dynamic> toMap() {
@@ -38,8 +38,8 @@ class DoctorsModel {
       'phone': phone,
       'email': email,
       'password_hash': password,
-      'is_Available': isAvailable,
-      'profile_Picture': profilePicture,
+      'is_available': isAvailable,
+      'profile_picture': profilePicture,
     };
   }
 }
