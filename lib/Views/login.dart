@@ -1,6 +1,7 @@
 import 'package:docbook/Models/doctorsmodel.dart';
 import 'package:docbook/Services/doctorshelper.dart';
 import 'package:docbook/Services/patientshelper.dart';
+import 'package:docbook/Views/signup.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/textbox.dart';
 import 'package:docbook/main.dart';
@@ -79,8 +80,10 @@ class _LoginView extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    emailController.text = 'Patient0@gmail.com';
-    passwordController.text = 'hashed_password_0';
+
+    // emailController.text = 'osman@gmail.com';
+    emailController.text = 'yasin@gmail.com';
+    passwordController.text = '1234';
     initAsync();
   }
 
@@ -183,7 +186,12 @@ class _LoginView extends State<LoginView> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Signup()),
+                  );
+                },
                 child: Text(
                   'Don\'t have an account? Sign Up',
                   style: TextStyle(color: Colors.amber[800]),

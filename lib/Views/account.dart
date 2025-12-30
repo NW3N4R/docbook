@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:docbook/Models/doctorsmodel.dart';
+import 'package:docbook/Models/patientmodel.dart';
 import 'package:docbook/Services/doctorshelper.dart';
+import 'package:docbook/Services/patientshelper.dart';
 import 'package:docbook/Views/login.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/textbox.dart';
@@ -18,9 +22,16 @@ final passCtor = TextEditingController();
 final specCtor = TextEditingController();
 final phoneCtor = TextEditingController();
 final isAvailableCtor = TextEditingController();
+String dateOfBirth = '2000-1-1';
+String selectedGender = 'Male';
 
 class _AccountViewState extends State<AccountView> {
   bool isReadOnly = true;
+  bool isAvailable = Currentuser.isDoctor
+      ? Currentuser.getCurrentDocots()?.isAvailable == 1
+      : false;
+  DateTime? selectedDate;
+
   @override
   void initState() {
     if (Currentuser.isDoctor) {
@@ -31,6 +42,26 @@ class _AccountViewState extends State<AccountView> {
       specCtor.text = doc?.specialty ?? '';
       phoneCtor.text = doc?.phone ?? '';
       isAvailableCtor.text = doc?.isAvailable.toString() ?? '';
+    } else {
+      final pat = Currentuser.getCurrentPatient();
+      nameCtor.text = pat?.name ?? '';
+      emailCtor.text = pat?.email ?? '';
+      passCtor.text = pat?.passwordHash ?? '';
+      phoneCtor.text = pat?.phone ?? '';
+
+      if (pat == null || pat.dateOfBirth == null) {
+        selectedDate = DateTime(2000);
+      } else {
+        List<String> dateParts = pat.dateOfBirth!.split('-');
+        int year = int.parse(dateParts[0]);
+        int month = int.parse(dateParts[1]);
+        int day = int.parse(dateParts[2]);
+        selectedDate = DateTime(year, month, day);
+      }
+      dateOfBirth =
+          pat?.dateOfBirth ??
+          '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}';
+      selectedGender = pat?.gender ?? 'Male';
     }
     super.initState();
   }
@@ -45,7 +76,7 @@ class _AccountViewState extends State<AccountView> {
         password: passCtor.text,
         specialty: specCtor.text,
         phone: phoneCtor.text,
-        isAvailable: 1,
+        isAvailable: isAvailable ? 1 : 0,
       );
       DoctorsHelper.updateDoctor(newdoc);
       DoctorsHelper.getAllDoctors();
@@ -53,7 +84,56 @@ class _AccountViewState extends State<AccountView> {
         Currentuser.name = nameCtor.text;
         Currentuser.login(doc.id, true);
       });
-    } else {}
+    }
+  }
+
+  void isAvailableChanged(bool? isavail) {
+    setState(() {
+      isAvailable = isavail ?? false;
+    });
+  }
+
+  Future<void> _selectDate() async {
+    print('show date called');
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2000),
+    );
+
+    setState(() {
+      selectedDate = pickedDate;
+      dateOfBirth =
+          '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}';
+    });
+  }
+
+  void changeGender(String newGender) {
+    setState(() {
+      selectedGender = newGender;
+    });
+  }
+
+  void updatePat() {
+    final pat = Currentuser.getCurrentPatient();
+    if (pat != null) {
+      var newdoc = PatientModel(
+        id: pat.id,
+        name: nameCtor.text,
+        email: emailCtor.text,
+        passwordHash: passCtor.text,
+        phone: phoneCtor.text,
+        gender: selectedGender,
+        dateOfBirth: dateOfBirth,
+      );
+      PatientsHelper.updatePatient(newdoc);
+      PatientsHelper.getAllPatients();
+      setState(() {
+        Currentuser.name = nameCtor.text;
+        Currentuser.login(pat.id, false);
+      });
+    }
   }
 
   @override
@@ -68,8 +148,8 @@ class _AccountViewState extends State<AccountView> {
         child: Column(
           children: [
             Currentuser.isDoctor
-                ? doctorProfileView(isReadOnly)
-                : patientProfileView(isReadOnly),
+                ? doctorProfileView(isReadOnly, isAvailableChanged, isAvailable)
+                : patientProfileView(isReadOnly, _selectDate, changeGender),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -116,7 +196,9 @@ class _AccountViewState extends State<AccountView> {
                   isReadOnly
                       ? SizedBox()
                       : TextButton(
-                          onPressed: Currentuser.isDoctor ? updateDoc : () {},
+                          onPressed: Currentuser.isDoctor
+                              ? updateDoc
+                              : updatePat,
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all(
                               Colors.amber[800],
@@ -137,7 +219,11 @@ class _AccountViewState extends State<AccountView> {
   }
 }
 
-Widget doctorProfileView(bool isReadOnly) {
+Widget doctorProfileView(
+  bool isReadOnly,
+  ValueChanged<bool?>? isAvailableChanged,
+  bool isAvailable,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -166,11 +252,24 @@ Widget doctorProfileView(bool isReadOnly) {
       ),
       accountTextField('Speciality', specCtor, readOnly: isReadOnly),
       accountTextField('Phone', phoneCtor, readOnly: isReadOnly),
+      Row(
+        children: [
+          Checkbox(
+            value: isAvailable,
+            onChanged: isReadOnly ? null : isAvailableChanged,
+          ),
+          Text('is Available'),
+        ],
+      ),
     ],
   );
 }
 
-Widget patientProfileView(bool isReadOnly) {
+Widget patientProfileView(
+  bool isReadOnly,
+  Future<void> Function() selectDate,
+  Function changeGender,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -198,7 +297,31 @@ Widget patientProfileView(bool isReadOnly) {
         isPass: isReadOnly,
         readOnly: isReadOnly,
       ),
-      accountTextField('Speciality', specCtor, readOnly: isReadOnly),
+      Text(dateOfBirth),
+      isReadOnly
+          ? SizedBox()
+          : TextButton(
+              onPressed: () {
+                selectDate();
+              },
+              child: Text('Select Date of Birth'),
+            ),
+      Text('Gender $selectedGender'),
+      isReadOnly
+          ? SizedBox()
+          : DropdownButton<String>(
+              value: selectedGender,
+              hint: Text('Select Gender'),
+              items: ['Male', 'Female'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                changeGender(newValue);
+              },
+            ),
     ],
   );
 }
