@@ -1,6 +1,7 @@
 import 'package:docbook/Models/doctorsmodel.dart';
 import 'package:docbook/Services/doctorshelper.dart';
 import 'package:docbook/Services/patientshelper.dart';
+import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/textbox.dart';
 import 'package:docbook/main.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +14,19 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'DocBook',
-      home: _LoginViewState(),
+      home: LoginView(),
     ),
   );
 }
 
-class _LoginViewState extends StatefulWidget {
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+
   @override
-  State<_LoginViewState> createState() => __LoginViewStateState();
+  State<LoginView> createState() => _LoginView();
 }
 
-class __LoginViewStateState extends State<_LoginViewState> {
+class _LoginView extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isIncorrect = false;
@@ -33,21 +36,38 @@ class __LoginViewStateState extends State<_LoginViewState> {
       passwordController.text,
     );
     if (isAnyDoctor || emailController.text == 'doc') {
+      if (!mounted) return;
+      int id = DoctorsHelper.doctors
+          .firstWhere(
+            (doctor) =>
+                doctor.email == emailController.text &&
+                doctor.password == passwordController.text,
+          )
+          .id;
+      Currentuser.login(id, true);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainApp()),
+        MaterialPageRoute(builder: (context) => MainApp()),
       );
       return;
-      // return;
     }
     final isPatient = await PatientsHelper.loginPatient(
       emailController.text,
       passwordController.text,
     );
     if (isPatient || emailController.text == 'pat') {
+      int id = PatientsHelper.patients
+          .firstWhere(
+            (patient) =>
+                patient.email == emailController.text &&
+                patient.passwordHash == passwordController.text,
+          )
+          .id;
+      Currentuser.login(id, false);
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainApp()),
+        MaterialPageRoute(builder: (context) => MainApp()),
       );
       return;
     }
@@ -58,15 +78,16 @@ class __LoginViewStateState extends State<_LoginViewState> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    emailController.text = 'Patient0@gmail.com';
+    passwordController.text = 'hashed_password_0';
     initAsync();
   }
 
   void initAsync() async {
     await Service.openDb();
-    final list = await DoctorsHelper.getAllDoctors();
-    if (list.isEmpty) {
+    await DoctorsHelper.getAllDoctors();
+    if (DoctorsHelper.doctors.isEmpty) {
       for (int i = 0; i < 20; i++) {
         var model = DoctorsModel(
           id: i,
@@ -79,9 +100,10 @@ class __LoginViewStateState extends State<_LoginViewState> {
         );
         DoctorsHelper.addDoctor(model);
       }
+      await DoctorsHelper.getAllDoctors();
     }
-    var patients = await PatientsHelper.getAllPatients();
-    if (patients.isEmpty) {
+    await PatientsHelper.getAllPatients();
+    if (PatientsHelper.patients.isEmpty) {
       for (int i = 0; i < 20; i++) {
         var model = PatientModel(
           id: i,
@@ -92,7 +114,7 @@ class __LoginViewStateState extends State<_LoginViewState> {
         );
         PatientsHelper.addPatient(model);
       }
-      patients = await PatientsHelper.getAllPatients();
+      await PatientsHelper.getAllPatients();
     }
   }
 

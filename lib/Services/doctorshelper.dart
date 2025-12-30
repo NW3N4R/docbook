@@ -3,13 +3,14 @@ import 'package:docbook/Services/main_service.dart';
 
 class DoctorsHelper {
   DoctorsHelper._();
-  static Future<List<DoctorsModel>> getAllDoctors() async {
+  static List<DoctorsModel> doctors = [];
+  static Future getAllDoctors() async {
     final db = Service.database;
     if (db != null) {
       final List<Map<String, dynamic>> maps = await db.query(
         Service.doctorsTable,
       );
-      return List.generate(maps.length, (i) {
+      doctors = List.generate(maps.length, (i) {
         return DoctorsModel.fromMap(maps[i]);
       });
     }

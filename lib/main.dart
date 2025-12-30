@@ -1,10 +1,6 @@
-import 'package:docbook/Models/doctorsmodel.dart';
-import 'package:docbook/Models/patientmodel.dart';
-import 'package:docbook/Services/doctorshelper.dart';
-import 'package:docbook/Services/patientshelper.dart';
+import 'package:docbook/Views/account.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
 import 'package:flutter/material.dart';
-import 'Services/main_service.dart';
 
 int currentIndex = 0;
 
@@ -34,7 +30,7 @@ class _MainAppState extends State<MainApp> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'DocBook',
+          'DocBook -', // Use the parameter
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -45,12 +41,17 @@ class _MainAppState extends State<MainApp> {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              Service.openDb();
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const AccountView(),
+                ),
+              );
             },
           ),
         ],
       ),
-      body: Center(child: Text('DocBook App')),
+      body: Center(child: Text('hello')),
       bottomNavigationBar: SafeArea(
         child: Row(
           mainAxisSize: MainAxisSize.min, // Shrinks the Row to fit its children
