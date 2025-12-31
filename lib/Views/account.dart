@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:docbook/Models/doctorsmodel.dart';
 import 'package:docbook/Models/patientmodel.dart';
 import 'package:docbook/Services/doctorshelper.dart';
@@ -94,7 +92,6 @@ class _AccountViewState extends State<AccountView> {
   }
 
   Future<void> _selectDate() async {
-    print('show date called');
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -104,8 +101,10 @@ class _AccountViewState extends State<AccountView> {
 
     setState(() {
       selectedDate = pickedDate;
-      dateOfBirth =
-          '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}';
+      if (selectedDate != null) {
+        dateOfBirth =
+            '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}';
+      }
     });
   }
 

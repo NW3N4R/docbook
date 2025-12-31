@@ -1,4 +1,4 @@
-class Appointment {
+class AppointmentModel {
   final int id;
   final int doctorId;
   final int patientId;
@@ -8,7 +8,7 @@ class Appointment {
   final String? notes;
   final String createdAt;
 
-  const Appointment({
+  const AppointmentModel({
     required this.id,
     required this.doctorId,
     required this.patientId,
@@ -19,20 +19,20 @@ class Appointment {
     required this.createdAt,
   });
 
-  factory Appointment.fromMap(Map<String, dynamic> json) => Appointment(
-    id: json['id'],
-    doctorId: json['doctor_id'],
-    patientId: json['patient_id'],
-    appointmentDate: json['appointment_date'],
-    appointmentTime: json['appointment_time'],
-    status: json['status'],
-    notes: json['notes'],
-    createdAt: json['created_at'],
-  );
+  factory AppointmentModel.fromMap(Map<String, dynamic> json) =>
+      AppointmentModel(
+        id: json['id'],
+        doctorId: json['doctor_id'],
+        patientId: json['patient_id'],
+        appointmentDate: json['appointment_date'],
+        appointmentTime: json['appointment_time'],
+        status: json['status'],
+        notes: json['notes'],
+        createdAt: json['created_at'],
+      );
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'doctor_id': doctorId,
       'patient_id': patientId,
       'appointment_date': appointmentDate,

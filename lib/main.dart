@@ -1,4 +1,7 @@
 import 'package:docbook/Views/account.dart';
+import 'package:docbook/Views/patientappointment.dart';
+import 'package:docbook/Views/patientshome.dart';
+import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +54,13 @@ class _MainAppState extends State<MainApp> {
           ),
         ],
       ),
-      body: Center(child: Text('hello')),
+      body: currentIndex == 0
+          ? Currentuser.isDoctor
+                ? Center(child: Text('Doc Home'))
+                : PatientHome()
+          : Currentuser.isDoctor
+          ? Center(child: Text('Doc History'))
+          : PatAppointView(),
       bottomNavigationBar: SafeArea(
         child: Row(
           mainAxisSize: MainAxisSize.min, // Shrinks the Row to fit its children

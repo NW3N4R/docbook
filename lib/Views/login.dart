@@ -106,6 +106,9 @@ class _LoginView extends State<LoginView> {
       await DoctorsHelper.getAllDoctors();
     }
     await PatientsHelper.getAllPatients();
+    // for (var i in PatientsHelper.patients) {
+    //   print('${i.email}  ${i.passwordHash}');
+    // }
     if (PatientsHelper.patients.isEmpty) {
       for (int i = 0; i < 20; i++) {
         var model = PatientModel(
