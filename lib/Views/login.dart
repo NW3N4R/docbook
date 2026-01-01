@@ -10,16 +10,6 @@ import 'package:flutter/material.dart';
 import '../Models/patientmodel.dart';
 import '../Services/main_service.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DocBook',
-      home: LoginView(),
-    ),
-  );
-}
-
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -81,8 +71,8 @@ class _LoginView extends State<LoginView> {
   void initState() {
     super.initState();
 
-    // emailController.text = 'osman@gmail.com';
-    emailController.text = 'yasin@gmail.com';
+    emailController.text = 'osman@gmail.com';
+    // emailController.text = 'yasin@gmail.com';
     passwordController.text = '1234';
     initAsync();
   }

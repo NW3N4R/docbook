@@ -29,19 +29,13 @@ class _PatAppointViewState extends State<PatAppointView> {
           .where((x) => x.patientId == usr!.id)
           .toList();
     });
-    for (var a in appoints) {
-      print('id:${a.id}');
-    }
   }
 
-  void deleteAppo(int index) {
-    int id = appoints[index].id;
+  void deleteAppo(int id) {
     AppointmentHelper.deleteAppointment(id);
     AppointmentHelper.getAllAppointments();
     setState(() {
-      appoints = AppointmentHelper.appointments
-          .where((x) => x.patientId == usr!.id)
-          .toList();
+      appoints.removeWhere((a) => a.id == id);
     });
   }
 
@@ -51,6 +45,7 @@ class _PatAppointViewState extends State<PatAppointView> {
       child: ListView.builder(
         itemCount: appoints.length,
         itemBuilder: (context, index) {
+          final appointment = appoints[index];
           return Dismissible(
             key: ValueKey(appoints[index].id),
             direction: DismissDirection.endToStart,
@@ -61,9 +56,8 @@ class _PatAppointViewState extends State<PatAppointView> {
               child: Icon(Icons.delete, color: Colors.white),
             ),
             onDismissed: (_) {
-              deleteAppo(index);
+              deleteAppo(appointment.id);
             },
-
             child: Container(
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.all(10),

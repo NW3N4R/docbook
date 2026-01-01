@@ -1,9 +1,21 @@
 import 'package:docbook/Views/account.dart';
+import 'package:docbook/Views/doctorshome.dart';
+import 'package:docbook/Views/login.dart';
 import 'package:docbook/Views/patientappointment.dart';
 import 'package:docbook/Views/patientshome.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
 import 'package:flutter/material.dart';
+
+void main() {
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'DocBook',
+      home: LoginView(),
+    ),
+  );
+}
 
 int currentIndex = 0;
 
@@ -56,33 +68,36 @@ class _MainAppState extends State<MainApp> {
       ),
       body: currentIndex == 0
           ? Currentuser.isDoctor
-                ? Center(child: Text('Doc Home'))
+                ? DoctorHome()
                 : PatientHome()
           : Currentuser.isDoctor
-          ? Center(child: Text('Doc History'))
+          ? Center()
           : PatAppointView(),
       bottomNavigationBar: SafeArea(
-        child: Row(
-          mainAxisSize: MainAxisSize.min, // Shrinks the Row to fit its children
-          mainAxisAlignment:
-              MainAxisAlignment.spaceEvenly, // Centers the buttons
-          children: [
-            ButtonWidget(
-              text: 'Home',
-              icon: Icons.home,
-              onPressed: () => onNavTap(0),
-              index: 0,
-              currentIndex: currentIndex,
-            ),
-            ButtonWidget(
-              text: 'List',
-              icon: Icons.schedule,
-              onPressed: () => onNavTap(1),
-              index: 1,
-              currentIndex: currentIndex,
-            ),
-          ],
-        ),
+        child: Currentuser.isDoctor
+            ? SizedBox()
+            : Row(
+                mainAxisSize:
+                    MainAxisSize.min, // Shrinks the Row to fit its children
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Centers the buttons
+                children: [
+                  ButtonWidget(
+                    text: 'Home',
+                    icon: Icons.home,
+                    onPressed: () => onNavTap(0),
+                    index: 0,
+                    currentIndex: currentIndex,
+                  ),
+                  ButtonWidget(
+                    text: 'List',
+                    icon: Icons.schedule,
+                    onPressed: () => onNavTap(1),
+                    index: 1,
+                    currentIndex: currentIndex,
+                  ),
+                ],
+              ),
       ),
     );
   }
