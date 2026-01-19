@@ -1,14 +1,14 @@
 import 'package:docbook/Models/doctorsmodel.dart';
+import 'package:docbook/Models/patientmodel.dart';
+import 'package:docbook/Services/appointmenthelper.dart';
 import 'package:docbook/Services/doctorshelper.dart';
+import 'package:docbook/Services/main_service.dart';
 import 'package:docbook/Services/patientshelper.dart';
 import 'package:docbook/Views/signup.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/textbox.dart';
 import 'package:docbook/main.dart';
 import 'package:flutter/material.dart';
-
-import '../Models/patientmodel.dart';
-import '../Services/main_service.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -22,6 +22,7 @@ class _LoginView extends State<LoginView> {
   final TextEditingController passwordController = TextEditingController();
   bool isIncorrect = false;
   void login() async {
+    await AppointmentHelper.getAllAppointments();
     final isAnyDoctor = await DoctorsHelper.loginDoctor(
       emailController.text,
       passwordController.text,

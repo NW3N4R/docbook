@@ -1,6 +1,5 @@
 import 'package:docbook/Models/appointmentsmodel.dart';
 import 'package:docbook/Services/appointmenthelper.dart';
-import 'package:docbook/Services/doctorshelper.dart';
 import 'package:docbook/Services/patientshelper.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,6 @@ class _DoctorHomeState extends State<DoctorHome> {
   }
 
   void initAsync() async {
-    await AppointmentHelper.getAllAppointments();
     setState(() {
       appoints = AppointmentHelper.appointments
           .where((x) => x.doctorId == currentDoc!.id)
@@ -103,6 +101,7 @@ class _DoctorHomeState extends State<DoctorHome> {
                   ],
                 ),
                 SizedBox(height: 20),
+                Text(appointment.notes ?? ''),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
