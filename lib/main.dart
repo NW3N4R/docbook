@@ -1,20 +1,60 @@
+import 'package:docbook/Services/themeprovider.dart';
 import 'package:docbook/Views/account.dart';
 import 'package:docbook/Views/doctorshome.dart';
 import 'package:docbook/Views/login.dart';
 import 'package:docbook/Views/patientappointment.dart';
 import 'package:docbook/Views/patientshome.dart';
+import 'package:docbook/Views/signup.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
+import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DocBook',
-      home: LoginView(),
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ThemeProvider())],
+      child: MyApp(),
     ),
   );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    // final localeProvider = Provider.of<LocaleProvider>(context);
+
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginView(),
+        '/register': (context) => Signup(),
+        // '/main': (context) => Main(),
+        // '/recent': (context) => RecentView(),
+        // '/account': (context) => Customizations(),
+        // '/post': (context) => PostItemView(),
+        // '/updateProfile': (context) => AccountView(),
+        // '/about': (context) => About(),
+        // '/settings': (context) => Settings(),
+      },
+      debugShowCheckedModeBanner: false,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeProvider.themeMode,
+      // locale: localeProvider.locale,
+      // supportedLocales: const [Locale('en', 'US'), Locale('ar')],
+      // localizationsDelegates: [
+      //   AppLocalizations.delegate,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+    );
+  }
 }
 
 int currentIndex = 0;
@@ -52,27 +92,22 @@ class _MainAppState extends State<MainApp> {
             color: Colors.amber[800],
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      const AccountView(),
-                ),
-              );
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.account_circle),
+        //     onPressed: () {
+        //       Navigator.of(context).push(
+        //         PageRouteBuilder(
+        //           pageBuilder: (context, animation, secondaryAnimation) =>
+        //               const AccountView(),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ],
       ),
-      body: currentIndex == 0
-          ? Currentuser.isDoctor
-                ? DoctorHome()
-                : PatientHome()
-          : Currentuser.isDoctor
-          ? Center()
-          : PatAppointView(),
+      body: Center(),
+
       bottomNavigationBar: SafeArea(
         child: Currentuser.isDoctor
             ? SizedBox()

@@ -5,8 +5,7 @@ import 'package:path/path.dart' as p;
 class Service {
   Service._();
   static final String _dbName = "docbook.db";
-  static final String doctorsTable = "doctors";
-  static final String patientsTable = "patients";
+  static final String doctorsTable = "Users";
   static final String appointmentsTable = "appointments";
 
   static Database? database;
@@ -18,39 +17,26 @@ class Service {
       path,
       version: 1,
       onCreate: (db, version) async {
-        await db.execute(_createDoctorsTable());
-        await db.execute(_createPatientsTable());
+        await db.execute(_createUsersTable());
         await db.execute(_createAppointmentsTable());
       },
     );
   }
 
-  static String _createDoctorsTable() {
+  static String _createUsersTable() {
     return '''
-    CREATE TABLE doctors (
+    CREATE TABLE Users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      specialty TEXT NOT NULL,
+      fullName TEXT NOT NULL,
       phone TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      password_hash TEXT NOT NULL,
-      is_available INTEGER NOT NULL DEFAULT 1,
-      profile_picture TEXT
-    )
-  ''';
-  }
-
-  static String _createPatientsTable() {
-    return '''
-    CREATE TABLE patients (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      phone TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      password_hash TEXT NOT NULL,
-      date_of_birth TEXT,
-      gender TEXT,
-      profile_picture TEXT
+      email TEXT NULL,
+      password text not null,
+      address TEXT  NULL ,
+      workPlace TEXT  NULL,
+      birthDay text ,
+      profession TEXT not null,
+      isDoctor INTEGER not null default 0,
+      isPatient INTEGER not null default 1
     )
   ''';
   }

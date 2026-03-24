@@ -1,27 +1,53 @@
 import 'package:flutter/material.dart';
 
-TextField buildTextField(
+Widget buildTextField(
   String labelText,
   TextInputType keyboardType,
-  TextEditingController controller, [
+  TextEditingController controller,
+  BuildContext context, {
+  bool isObsecure = false,
   bool readOnly = false,
-]) {
-  return TextField(
-    controller: controller,
-    obscureText: keyboardType == TextInputType.visiblePassword,
-    keyboardType: keyboardType,
-    decoration: InputDecoration(
-      labelText: labelText,
-      labelStyle: TextStyle(
-        color: Colors.black, // 👈 label text color
+  String hint = "",
+  IconData? prefixIcon,
+  IconData? suffixIcon,
+  Function? onSuffixClick,
+  FormFieldValidator? validate
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(labelText),
+      SizedBox(height: 6),
+      TextFormField(
+        controller: controller,
+        obscureText: isObsecure,
+        keyboardType: keyboardType,
+        validator: validate,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.surfaceContainer,
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+          suffixIcon: suffixIcon != null
+              ? IconButton(
+                  icon: Icon(suffixIcon),
+                  onPressed: onSuffixClick != null
+                      ? () => onSuffixClick()
+                      : null,
+                )
+              : null,
+
+          hintText: hint == "" ? labelText : hint,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.amber[600]!),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.amber[800]!),
-      ),
-    ),
+    ],
   );
 }
 

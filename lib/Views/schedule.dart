@@ -1,10 +1,3 @@
-import 'package:docbook/Models/appointmentsmodel.dart';
-import 'package:docbook/Models/doctorsmodel.dart';
-import 'package:docbook/Models/patientmodel.dart';
-import 'package:docbook/Services/appointmenthelper.dart';
-import 'package:docbook/Services/doctorshelper.dart';
-import 'package:docbook/currentuser.dart';
-import 'package:docbook/customWidgets/textbox.dart';
 import 'package:flutter/material.dart';
 
 class Schedule extends StatefulWidget {
@@ -16,7 +9,6 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
-  late final DoctorsModel doctor;
   late final String docName;
   late final String patName;
   late String selectedDateStr = '';
@@ -25,11 +17,6 @@ class _ScheduleState extends State<Schedule> {
 
   @override
   void initState() {
-    DoctorsHelper.getAllDoctors();
-
-    doctor = DoctorsHelper.doctors.firstWhere((x) => x.id == widget.docID);
-    docName = doctor.name;
-    patName = Currentuser.name ?? '';
     super.initState();
   }
 
@@ -75,28 +62,7 @@ class _ScheduleState extends State<Schedule> {
     }
   }
 
-  void setSchedule() {
-    AppointmentHelper.getAllAppointments();
-    final PatientModel? usr = Currentuser.getCurrentPatient();
-    if (usr == null) {
-      return;
-    }
-    int newId = AppointmentHelper.appointments.length + 1;
-    var appoint = AppointmentModel(
-      id: newId,
-      doctorId: widget.docID,
-      patientId: usr.id,
-      appointmentDate: selectedDateStr,
-      appointmentTime: selectedTimeStr,
-      status: 'inline',
-      notes: noteTXT.text,
-      createdAt:
-          '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
-    );
-    AppointmentHelper.addAppointment(appoint);
-    AppointmentHelper.getAllAppointments();
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,16 +106,16 @@ class _ScheduleState extends State<Schedule> {
             SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: buildTextField('Note', TextInputType.text, noteTXT),
+              // child: buildTextField('Note', TextInputType.text, noteTXT),
             ),
             SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: setSchedule,
-              child: Text(
-                'Set Schedule',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: setSchedule,
+            //   child: Text(
+            //     'Set Schedule',
+            //     style: TextStyle(color: Colors.black),
+            //   ),
+            // ),
           ],
         ),
       ),

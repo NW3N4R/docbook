@@ -1,6 +1,4 @@
 import 'package:docbook/Models/appointmentsmodel.dart';
-import 'package:docbook/Services/doctorshelper.dart';
-import 'package:docbook/currentuser.dart';
 import 'package:flutter/material.dart';
 
 import '../Services/appointmenthelper.dart';
@@ -13,7 +11,7 @@ class PatAppointView extends StatefulWidget {
 }
 
 class _PatAppointViewState extends State<PatAppointView> {
-  final usr = Currentuser.getCurrentPatient();
+  // final usr = Currentuser.getCurrentPatient();
 
   late List<AppointmentModel> appoints = [];
   @override
@@ -24,11 +22,11 @@ class _PatAppointViewState extends State<PatAppointView> {
 
   void load() async {
     await AppointmentHelper.getAllAppointments();
-    setState(() {
-      appoints = AppointmentHelper.appointments
-          .where((x) => x.patientId == usr!.id)
-          .toList();
-    });
+    // setState(() {
+    //   appoints = AppointmentHelper.appointments
+    //       .where((x) => x.patientId == usr!.id)
+    //       .toList();
+    // });
   }
 
   void deleteAppo(int id) {
@@ -72,26 +70,26 @@ class _PatAppointViewState extends State<PatAppointView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          DoctorsHelper.doctors
-                              .firstWhere(
-                                (x) => x.id == appoints[index].doctorId,
-                              )
-                              .name,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        Text(
-                          DoctorsHelper.doctors
-                              .firstWhere(
-                                (x) => x.id == appoints[index].doctorId,
-                              )
-                              .specialty,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        // Text(
+                        //   DoctorsHelper.doctors
+                        //       .firstWhere(
+                        //         (x) => x.id == appoints[index].doctorId,
+                        //       )
+                        //       .name,
+                        //   style: TextStyle(
+                        //     fontSize: 24,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.orange,
+                        //   ),
+                        // ),
+                        // Text(
+                        //   DoctorsHelper.doctors
+                        //       .firstWhere(
+                        //         (x) => x.id == appoints[index].doctorId,
+                        //       )
+                        //       .specialty,
+                        //   style: TextStyle(fontWeight: FontWeight.bold),
+                        // ),
                       ],
                     ),
                   ),
