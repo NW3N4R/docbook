@@ -1,6 +1,12 @@
+import 'dart:ui';
+
 import 'package:docbook/Services/main_service.dart';
-import 'package:docbook/customWidgets/textbox.dart';
+import 'package:docbook/currentuser.dart';
+import 'package:docbook/customWidgets/fields.dart';
+import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:toastification/toastification.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -10,24 +16,20 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginView extends State<LoginView> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phonector = TextEditingController();
+  final TextEditingController passctor = TextEditingController();
   bool isIncorrect = false;
-  
 
   @override
   void initState() {
     super.initState();
-
-    emailController.text = 'osman@gmail.com';
-    // emailController.text = 'yasin@gmail.com';
-    passwordController.text = '1234';
+    phonector.text = '07721563250';
+    passctor.text = '1234';
     initAsync();
   }
 
   void initAsync() async {
     await Service.openDb();
- 
   }
 
   IconData obsecureIcon = Icons.remove_red_eye;
@@ -35,9 +37,9 @@ class _LoginView extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Flex(
             direction: Axis.vertical,
@@ -51,7 +53,7 @@ class _LoginView extends State<LoginView> {
                       curve: Curves.easeInOut,
                       height: !isKeyboardVisible ? 80 : 60,
                       child: Image.asset(
-                        'assets/imgs/Appointment-256.png',
+                        'assets/imgs/Icon.png',
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -79,24 +81,26 @@ class _LoginView extends State<LoginView> {
                     padding: EdgeInsets.all(15),
                     margin: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surface.withAlpha(120),
                     ),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           buildTextField(
-                            'Email',
-                            TextInputType.emailAddress,
-                            emailController,
+                            'Phone',
+                            TextInputType.phone,
+                            phonector,
                             context,
-                            prefixIcon: Icons.email,
+                            prefixIcon: Icons.phone,
                           ),
                           SizedBox(height: 15),
                           buildTextField(
                             'Password',
                             TextInputType.visiblePassword,
-                            passwordController,
+                            passctor,
                             context,
                             isObsecure: isObsecure,
                             prefixIcon: Icons.password,
@@ -122,14 +126,8 @@ class _LoginView extends State<LoginView> {
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
-                                backgroundColor: WidgetStatePropertyAll(
-                                  Theme.of(context).colorScheme.primary,
-                                ),
-                                foregroundColor: WidgetStatePropertyAll(
-                                  Theme.of(context).colorScheme.onSurface,
-                                ),
                               ),
-                              onPressed: (){},
+                              onPressed: login,
                               child: Text(
                                 'Login',
                                 textAlign: TextAlign.center,
@@ -159,5 +157,19 @@ class _LoginView extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  void login() async {
+    bool didLogin = await Currentuser.login(phonector.text, passctor.text);
+    if (didLogin) {
+      Navigator.pushReplacementNamed(context, '/main');
+    } else {
+      showToast(
+        'Failed',
+        'incorrect phone or password',
+        ToastificationType.error,
+        context,
+      );
+    }
   }
 }

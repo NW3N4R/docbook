@@ -1,11 +1,10 @@
 import 'package:docbook/Services/themeprovider.dart';
 import 'package:docbook/Views/account.dart';
-import 'package:docbook/Views/doctorshome.dart';
+import 'package:docbook/Views/appointmentsview.dart';
+import 'package:docbook/Views/home.dart';
 import 'package:docbook/Views/login.dart';
-import 'package:docbook/Views/patientappointment.dart';
-import 'package:docbook/Views/patientshome.dart';
 import 'package:docbook/Views/signup.dart';
-import 'package:docbook/currentuser.dart';
+import 'package:docbook/Views/updateprofile.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
 import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +32,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginView(),
         '/register': (context) => Signup(),
-        // '/main': (context) => Main(),
-        // '/recent': (context) => RecentView(),
+        '/main': (context) => MainApp(),
         // '/account': (context) => Customizations(),
         // '/post': (context) => PostItemView(),
-        // '/updateProfile': (context) => AccountView(),
+        '/updateProfile': (context) => UpdateProfile(),
         // '/about': (context) => About(),
         // '/settings': (context) => Settings(),
       },
@@ -57,8 +55,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-int currentIndex = 0;
-
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
@@ -69,7 +65,7 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   void onNavTap(int index) {
     setState(() {
-      currentIndex = index;
+      currentPage = index;
     });
   }
 
@@ -78,61 +74,42 @@ class _MainAppState extends State<MainApp> {
     super.initState();
   }
 
+  List<Widget> pages = [AppointmentsView(), HomeView(), AccountView()];
+  int currentPage = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'DocBook -', // Use the parameter
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.amber[800],
-          ),
-        ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.account_circle),
-        //     onPressed: () {
-        //       Navigator.of(context).push(
-        //         PageRouteBuilder(
-        //           pageBuilder: (context, animation, secondaryAnimation) =>
-        //               const AccountView(),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ],
-      ),
-      body: Center(),
+      body: pages[currentPage],
 
       bottomNavigationBar: SafeArea(
-        child: Currentuser.isDoctor
-            ? SizedBox()
-            : Row(
-                mainAxisSize:
-                    MainAxisSize.min, // Shrinks the Row to fit its children
-                mainAxisAlignment:
-                    MainAxisAlignment.center, // Centers the buttons
-                children: [
-                  ButtonWidget(
-                    text: 'Home',
-                    icon: Icons.home,
-                    onPressed: () => onNavTap(0),
-                    index: 0,
-                    currentIndex: currentIndex,
-                  ),
-                  ButtonWidget(
-                    text: 'List',
-                    icon: Icons.schedule,
-                    onPressed: () => onNavTap(1),
-                    index: 1,
-                    currentIndex: currentIndex,
-                  ),
-                ],
-              ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min, // Shrinks the Row to fit its children
+          mainAxisAlignment:
+              MainAxisAlignment.spaceAround, // Centers the buttons
+          children: [
+            ButtonWidget(
+              text: 'Appointments',
+              icon: Icons.calendar_month,
+              onPressed: () => onNavTap(0),
+              index: 0,
+              currentIndex: currentPage,
+            ),
+            ButtonWidget(
+              text: 'Home',
+              icon: Icons.home,
+              onPressed: () => onNavTap(1),
+              index: 1,
+              currentIndex: currentPage,
+            ),
+            ButtonWidget(
+              text: 'Account',
+              icon: Icons.person,
+              onPressed: () => onNavTap(2),
+              index: 2,
+              currentIndex: currentPage,
+            ),
+          ],
+        ),
       ),
     );
   }

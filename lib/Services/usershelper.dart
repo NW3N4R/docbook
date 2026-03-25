@@ -2,7 +2,7 @@ import 'package:docbook/Models/usersmodel.dart';
 import 'package:docbook/Services/main_service.dart';
 
 class UsersHelper {
- static final String _tableName = 'Users';
+  static final String _tableName = 'Users';
   static List<UsersModel> users = [];
 
   static Future getUsers() async {
@@ -60,14 +60,9 @@ class UsersHelper {
 
   static Future<UsersModel?> loginUser(String contact, String password) async {
     await getUsers();
-    if (users.any(
-      (u) =>
-          u.password == password && (u.email == contact || u.phone == contact),
-    )) {
+    if (users.any((u) => u.password == password && u.phone == contact)) {
       return users.firstWhere(
-        (u) =>
-            u.password == password &&
-            (u.email == contact || u.phone == contact),
+        (u) => u.password == password && u.phone == contact,
       );
     }
     return null;

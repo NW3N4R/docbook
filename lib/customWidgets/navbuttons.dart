@@ -28,7 +28,7 @@ class ButtonWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: currentIndex == index
-                ? const Color.fromARGB(35, 255, 146, 14)
+                ? Theme.of(context).colorScheme.primary.withAlpha(80)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(50),
           ),
@@ -40,7 +40,7 @@ class ButtonWidget extends StatelessWidget {
                 size: 32,
                 color: currentIndex != index
                     ? const Color.fromARGB(255, 105, 104, 104)
-                    : const Color.fromARGB(255, 255, 146, 14),
+                    : Theme.of(context).colorScheme.primary
               ),
               // Text(
               //   text,

@@ -1,5 +1,6 @@
 import 'package:docbook/Models/usersmodel.dart';
 import 'package:docbook/Services/usershelper.dart';
+import 'package:flutter/material.dart';
 
 class Currentuser {
   Currentuser._();
@@ -9,7 +10,5 @@ class Currentuser {
     return loggedUser != null;
   }
 
-  static void logout() {
-    loggedUser = null;
-  }
+
 }

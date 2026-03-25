@@ -4,40 +4,32 @@ class UsersModel {
   final int id;
   final String fullName;
   final String phone;
-  final String email;
-  final String address;
-  final String workPlace;
-  final DateTime birthDay;
-  final String profession;
-  bool isDoctor, isPatient;
-
+  bool seeingPatients;
   final String password;
+  final String profession;
+  final String address;
+  final int gender;
+
   UsersModel(
     this.id,
     this.fullName,
     this.phone,
-    this.email,
-    this.address,
-    this.workPlace,
-    this.birthDay,
-    this.profession,
     this.password,
-    this.isDoctor,
-    this.isPatient,
+    this.seeingPatients,
+    this.profession,
+    this.address,
+    this.gender,
   );
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
       map['id'],
       map['fullName'],
       map['phone'],
-      map['email'],
-      map['address'],
-      map['workPlace'],
-      DateTime.parse(map['birthDay']),
-      map['profession'],
       map['password'],
-      map['isDoctor'] == 1,
-      map['isPatient'] == 1,
+      map['isOpenToSeePatients'] == 1,
+      map['profession'],
+      map['address'],
+      map['gender'],
     );
   }
 
@@ -46,14 +38,11 @@ class UsersModel {
       'id': id,
       'fullName': fullName,
       'phone': phone,
-      'email': email,
-      'address': address,
-      'workPlace': workPlace,
-      'birthDay': birthDay.toString(),
-      'profession': profession,
       'password': password,
-      'isDoctor': isDoctor == true ? 1 : 0,
-      'isPatient': isPatient == true ? 1 : 0,
+      'isOpenToSeePatients': seeingPatients == true ? 1 : 0,
+      'profession': profession,
+      'gender': gender,
+      'address': address,
     };
   }
 }

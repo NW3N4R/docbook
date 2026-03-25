@@ -29,14 +29,11 @@ class Service {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       fullName TEXT NOT NULL,
       phone TEXT NOT NULL,
-      email TEXT NULL,
       password text not null,
-      address TEXT  NULL ,
-      workPlace TEXT  NULL,
-      birthDay text ,
-      profession TEXT not null,
-      isDoctor INTEGER not null default 0,
-      isPatient INTEGER not null default 1
+      isOpenToSeePatients INTEGER not null default 0,
+      address text not NULL,
+      profession text not null,
+      gender integer not null
     )
   ''';
   }
@@ -52,7 +49,6 @@ class Service {
       status TEXT NOT NULL DEFAULT 'pending',
       notes TEXT,
       created_at TEXT NOT NULL,
-
       FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,
       FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE
     )
