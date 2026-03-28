@@ -6,11 +6,12 @@ class AppThemes {
   static const backgroundLight = Color.fromARGB(255, 248, 250, 252);
   static final primaryLight = Color.fromARGB(255, 0, 189, 142);
   static final secondaryLight = Color.fromARGB(255, 16, 185, 129);
-  static const surfaceLight = Color.fromARGB(255, 255, 255, 255);
+  static const surfaceLight = Color.fromARGB(255, 221, 220, 220);
   static const mainTextLight = Color.fromARGB(255, 30, 41, 59);
+  static const fieldBackLight = Color.fromARGB(255, 225, 224, 224);
 
   // Dark Mode Colors
-  static const backgroundDark = Color.fromARGB(255, 17, 27, 21);
+  static const backgroundDark = Color.fromARGB(255, 11, 17, 14);
   static final primaryDark = Color.fromARGB(255, 2, 148, 111);
   static final secondaryDark = Color.fromARGB(255, 52, 211, 153);
   static const surfaceDark = Color.fromARGB(255, 33, 40, 36);
@@ -27,6 +28,15 @@ class AppThemes {
       surface: surfaceLight,
     ),
     scaffoldBackgroundColor: backgroundLight,
+     elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(primaryLight),
+        foregroundColor: WidgetStatePropertyAll(Colors.white),
+      ),
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.transparent,
+    )
   );
 
   static final ThemeData darkTheme = ThemeData(

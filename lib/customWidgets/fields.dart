@@ -1,5 +1,6 @@
 import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 Widget buildTextField(
   String labelText,
@@ -14,7 +15,11 @@ Widget buildTextField(
   Function? onSuffixClick,
   FormFieldValidator? validate,
   Color? fillColor,
+  GestureTapCallback? onTap,
 }) {
+  final defaultBackColor = Theme.brightnessOf(context) == Brightness.dark
+      ? AppThemes.fieldBackDark
+      : AppThemes.fieldBackLight;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -25,9 +30,11 @@ Widget buildTextField(
         obscureText: isObsecure,
         keyboardType: keyboardType,
         validator: validate,
+        readOnly: readOnly,
+        onTap: onTap,
         decoration: InputDecoration(
           filled: true,
-          fillColor: fillColor ?? AppThemes.fieldBackDark,
+          fillColor: fillColor ?? defaultBackColor,
           prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
           suffixIcon: suffixIcon != null
               ? IconButton(
@@ -73,16 +80,19 @@ Column dropdown(
   Function? onSuffixClick,
   FormFieldValidator? validate,
 }) {
+  final defaultBackColor = Theme.brightnessOf(context) == Brightness.dark
+      ? AppThemes.fieldBackDark
+      : AppThemes.fieldBackLight;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(label),
-      SizedBox(height: 6,),
+      SizedBox(height: 6),
       DropdownButtonFormField<String>(
         initialValue: items.contains(value) ? value : items.first,
         decoration: InputDecoration(
           filled: true,
-          fillColor: fillColor ?? AppThemes.fieldBackDark,
+          fillColor: fillColor ?? defaultBackColor,
           prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
           suffixIcon: suffixIcon != null
               ? IconButton(
@@ -121,4 +131,39 @@ Column dropdown(
       SizedBox(height: 20),
     ],
   );
+}
+
+Future<String> pickDate(BuildContext context) async {
+  final pickedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime.now(),
+    lastDate: DateTime(2030),
+  );
+  if (pickedDate == null) return '';
+  final DateTime dateTime = DateTime(
+    pickedDate.year,
+    pickedDate.month,
+    pickedDate.day,
+  );
+
+  return DateFormat('dd-MM-yyyy').format(dateTime);
+}
+
+Future<String?> pickTime(BuildContext context) async {
+  final TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+  );
+  if (pickedTime == null) return '';
+  final DateTime time = DateTime(
+    2026,
+    1,
+    1,
+    pickedTime.hour,
+    pickedTime.minute,
+  );
+  int hour12 = time.hour % 12 == 0 ? 12 : time.hour % 12;
+  final String period = pickedTime.period == DayPeriod.am ? 'AM' : 'PM';
+  return '$hour12:${time.minute} $period';
 }

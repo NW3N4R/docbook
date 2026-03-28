@@ -1,4 +1,3 @@
-// import 'dart:';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 
@@ -46,7 +45,7 @@ class Service {
       patient_id INTEGER NOT NULL,
       appointment_date TEXT NOT NULL,
       appointment_time TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'pending',
+      status int NOT NULL DEFAULT '0',
       notes TEXT,
       created_at TEXT NOT NULL,
       FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,

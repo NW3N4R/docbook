@@ -4,7 +4,7 @@ class AppointmentModel {
   final int patientId;
   final String appointmentDate;
   final String appointmentTime;
-  final String status;
+  final int status;
   final String? notes;
   final String createdAt;
 
@@ -41,5 +41,22 @@ class AppointmentModel {
       'notes': notes,
       'created_at': createdAt,
     };
+  }
+}
+enum AppointmentStatus {
+  ongoing,   // 0
+  accepted,  // 1
+  rejected,  // 2
+  completed  // 3
+}
+class AppointmentStatusModel {
+  // Map integers from DB to Enum
+  static AppointmentStatus fromInt(int value) {
+    return AppointmentStatus.values[value];
+  }
+
+  // Map Enum to integer for DB
+  static int toInt(AppointmentStatus status) {
+    return status.index;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:docbook/Models/usersmodel.dart';
 import 'package:docbook/Services/usershelper.dart';
 import 'package:docbook/customWidgets/fields.dart';
+import 'package:docbook/l10n/app_localizations.dart';
 import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
@@ -26,7 +27,7 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-
+    final locale = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -35,10 +36,7 @@ class _SignupState extends State<Signup> {
             children: [
               Container(
                 padding: EdgeInsets.all(5),
-                // decoration: BoxDecoration(
-                //   color: Theme.of(context).colorScheme.primary.withAlpha(120),
-                //   borderRadius: BorderRadius.circular(20),
-                // ),
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -49,7 +47,7 @@ class _SignupState extends State<Signup> {
                         children: [
                           Text(
                             textAlign: TextAlign.start,
-                            'Welcome to',
+                            locale!.welcomeTo,
                             style: TextStyle(
                               fontFamily: 'rudawregular2',
                               fontSize: 32,
@@ -72,7 +70,6 @@ class _SignupState extends State<Signup> {
                         Container(
                           height: 50,
                           padding: EdgeInsets.all(5),
-
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
@@ -116,24 +113,24 @@ class _SignupState extends State<Signup> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           buildTextField(
-                            'Full name',
+                            locale.nameHolder,
                             TextInputType.text,
                             nameCtor,
                             context,
                             prefixIcon: Icons.person,
                             validate: (value) {
                               if (value == null || value.toString().isEmpty) {
-                                return 'full name is required';
+                                return locale.plsTypeYourFullName;
                               }
                               return null;
                             },
                             fillColor: Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(80),
+                            ).colorScheme.primary.withAlpha(30),
                           ),
                           SizedBox(height: 12),
                           buildTextField(
-                            'Phone No',
+                            locale.phone,
                             TextInputType.phone,
                             phoneCtor,
                             context,
@@ -142,17 +139,17 @@ class _SignupState extends State<Signup> {
                               if (value == null ||
                                   value.toString().isEmpty ||
                                   value.toString().length != 11) {
-                                return 'Invalid phone';
+                                return locale.invalidPhone;
                               }
                               return null;
                             },
                             fillColor: Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(80),
+                            ).colorScheme.primary.withAlpha(30),
                           ),
                           SizedBox(height: 12),
                           buildTextField(
-                            'Password',
+                            locale.yourSecurePassword,
                             TextInputType.visiblePassword,
                             passCtor,
                             context,
@@ -171,68 +168,69 @@ class _SignupState extends State<Signup> {
                             validate: (value) {
                               if (value == null ||
                                   value.toString().length < 4) {
-                                return 'password most be 4 characters at least';
+                                return locale.invalidPhone;
                               }
                               return null;
                             },
                             fillColor: Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(80),
+                            ).colorScheme.primary.withAlpha(30),
                           ),
                           SizedBox(height: 12),
                           buildTextField(
-                            'Profession',
+                            locale.profession,
                             TextInputType.text,
                             professionCtor,
                             context,
                             prefixIcon: Icons.work,
                             validate: (value) {
                               if (value == null || value.toString().isEmpty) {
-                                return 'Profession required';
+                                return locale.professionReq;
                               }
                               return null;
                             },
                             fillColor: Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(80),
+                            ).colorScheme.primary.withAlpha(30),
                           ),
                           SizedBox(height: 12),
                           buildTextField(
-                            'Address',
+                            locale.address,
                             TextInputType.text,
                             addressCtor,
                             context,
                             prefixIcon: Icons.work,
                             validate: (value) {
                               if (value == null || value.toString().isEmpty) {
-                                return 'Address required';
+                                return locale.addressReq;
                               }
                               return null;
                             },
                             fillColor: Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(80),
+                            ).colorScheme.primary.withAlpha(30),
                           ),
                           SizedBox(height: 12),
                           dropdown(
-                            'Gender',
-                            'male',
-                            ['male', 'female'],
+                            locale.gender,
+                            locale.male,
+                            [locale.male, locale.female],
                             context,
                             (value) {
                               gender = genderList.indexOf(value!);
                             },
                             prefixIcon: Icons.male,
-                              fillColor: Theme.of(
+                            fillColor: Theme.of(
                               context,
-                            ).colorScheme.primary.withAlpha(80), 
+                            ).colorScheme.primary.withAlpha(30),
                           ),
                           SizedBox(height: 12),
                           SwitchListTile(
-                            title: Text('I\'m a Doctor'),
-                            subtitle: Text(
-                              'selecting this makes your account to act as a doctor so patients can request meetings',
+                            title: Text(
+                              locale.imDoctor,
+                              style: Theme.of(context).textTheme.headlineSmall,
                             ),
+                            subtitle: Text(locale.imDocDesc),
                             value: isDoctor,
                             onChanged: (value) {
                               isDoctor = value;
@@ -246,7 +244,7 @@ class _SignupState extends State<Signup> {
                 ),
               ),
               if (!isKeyboardVisible)
-                ElevatedButton(onPressed: signup, child: Text('Signup')),
+                ElevatedButton(onPressed: signup, child: Text(locale.signUp)),
             ],
           ),
         ),
@@ -255,6 +253,8 @@ class _SignupState extends State<Signup> {
   }
 
   Future signup() async {
+        final locale = AppLocalizations.of(context);
+
     if (formKey.currentState!.validate()) {
       var model = UsersModel(
         0,
@@ -270,15 +270,15 @@ class _SignupState extends State<Signup> {
       int id = await UsersHelper.insertUser(model);
       if (id > 0) {
         showToast(
-          'Sign Up Success',
-          'Your account created successfuly',
+          locale!.actionSuccess,
+          locale.accountCreated,
           ToastificationType.success,
           context,
         );
       } else {
         showToast(
-          'Failed',
-          'An Error Occured',
+          locale!.errorHappened,
+          locale.errorHappened,
           ToastificationType.error,
           context,
         );

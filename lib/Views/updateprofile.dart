@@ -2,6 +2,7 @@ import 'package:docbook/Models/usersmodel.dart';
 import 'package:docbook/Services/usershelper.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/fields.dart';
+import 'package:docbook/l10n/app_localizations.dart';
 import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
@@ -39,12 +40,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         title: Text(
-          'Update Your Profile',
+          locale!.editProfile,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         automaticallyImplyLeading: false,
@@ -60,7 +62,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
               Expanded(
@@ -70,21 +72,21 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     child: Column(
                       children: [
                         buildTextField(
-                          'Full name',
+                          locale!.nameHolder,
                           TextInputType.text,
                           nameCtor,
                           context,
                           prefixIcon: Icons.person,
                           validate: (value) {
                             if (value == null || value.toString().isEmpty) {
-                              return 'full name is required';
+                              return locale.plsTypeYourFullName;
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 12),
                         buildTextField(
-                          'Phone No',
+                          locale.phone,
                           TextInputType.phone,
                           phoneCtor,
                           context,
@@ -93,14 +95,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             if (value == null ||
                                 value.toString().isEmpty ||
                                 value.toString().length != 11) {
-                              return 'Invalid phone';
+                              return locale.invalidPhone;
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 12),
                         buildTextField(
-                          'Password',
+                          locale.yourSecurePassword,
                           TextInputType.visiblePassword,
                           passCtor,
                           context,
@@ -118,44 +120,44 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           },
                           validate: (value) {
                             if (value == null || value.toString().length < 4) {
-                              return 'password most be 4 characters at least';
+                              return locale.passwordisRequired;
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 12),
                         buildTextField(
-                          'Profession',
+                          locale.profession,
                           TextInputType.text,
                           professionCtor,
                           context,
                           prefixIcon: Icons.work,
                           validate: (value) {
                             if (value == null || value.toString().isEmpty) {
-                              return 'Profession required';
+                              return locale.professionReq;
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 12),
                         buildTextField(
-                          'Address',
+                          locale.address,
                           TextInputType.text,
                           addressCtor,
                           context,
                           prefixIcon: Icons.location_on,
                           validate: (value) {
                             if (value == null || value.toString().isEmpty) {
-                              return 'Address required';
+                              return locale.addressReq;
                             }
                             return null;
                           },
                         ),
                         SizedBox(height: 12),
                         dropdown(
-                          'Gender',
+                          locale.gender,
                           genderList[Currentuser.loggedUser!.gender],
-                          ['male', 'female'],
+                          [locale.male, locale.female],
                           context,
                           (value) {
                             gender = genderList.indexOf(value!);
@@ -165,10 +167,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         SizedBox(height: 12),
 
                         SwitchListTile(
-                          title: Text('I\'m a Doctor'),
-                          subtitle: Text(
-                            'selecting this makes your account to act as a doctor so patients can request meetings',
+                          title: Text(
+                            locale.imDoctor,
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
+                          subtitle: Text(locale.imDocDesc),
                           value: isDoctor,
                           onChanged: (value) {
                             isDoctor = value;
@@ -193,15 +196,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text("Confirm Delete"),
-                              content: const Text(
-                                "Are you sure you want to delete this user? This action cannot be undone.",
-                              ),
+                              title: Text(locale.confirmDelete),
+                              content: Text(locale.deleteWarn),
                               actions: [
                                 // 2. Cancel Button
                                 TextButton(
                                   child: Text(
-                                    "Cancel",
+                                    locale.cancel,
                                     style: Theme.of(
                                       context,
                                     ).textTheme.bodyMedium,
@@ -213,7 +214,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 // 3. Confirm Button
                                 TextButton(
                                   onPressed: deleteProfile,
-                                  child: Text("Delete"),
+                                  child: Text(locale.delete),
                                 ),
                               ],
                             );
@@ -221,13 +222,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         );
                       },
                       child: Text(
-                        'Delete Account',
+                        locale.deleteAcc,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                     ElevatedButton(
                       onPressed: updateUser,
-                      child: Text('Update'),
+                      child: Text(locale.editProfile),
                     ),
                   ],
                 ),
@@ -240,11 +241,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   void deleteProfile() async {
+    final locale = AppLocalizations.of(context);
     int n = await UsersHelper.deleteUser(Currentuser.loggedUser!.id);
     if (n == 1) {
       showToast(
-        'success',
-        'account deleted',
+        locale!.actionSuccess,
+        locale.deleteSuccess,
         ToastificationType.success,
         context,
       );
@@ -252,8 +254,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
       Navigator.pushReplacementNamed(context, '/');
     } else {
       showToast(
-        'Failed',
-        'couldn\' delete profile',
+        locale!.errorHappened,
+        locale.errorHappened,
         ToastificationType.error,
         context,
       );
@@ -261,6 +263,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   void updateUser() async {
+    final locale = AppLocalizations.of(context);
     if (!formKey.currentState!.validate()) return;
     var updatedUserModel = UsersModel(
       Currentuser.loggedUser!.id,
@@ -276,16 +279,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
     if (n == 1) {
       Currentuser.loggedUser = updatedUserModel;
       showToast(
-        "success",
-        'profile updated',
+        locale!.actionSuccess,
+        locale.updatesuccess,
         ToastificationType.success,
         context,
       );
       setState(() {});
     } else {
       showToast(
-        "error",
-        'profile coudln\'t be  updated',
+        locale!.errorHappened,
+        locale.errorHappened,
         ToastificationType.error,
         context,
       );

@@ -1,4 +1,5 @@
 import 'package:docbook/currentuser.dart';
+import 'package:docbook/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AccountView extends StatefulWidget {
@@ -17,10 +18,11 @@ class _AccountViewState extends State<AccountView> {
   List<String> genderList = ["male", "female"];
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Account & Settings',
+          locale!.accountAndSettings,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         actions: [
@@ -44,7 +46,7 @@ class _AccountViewState extends State<AccountView> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(20),
+                  color: Theme.of(context).colorScheme.primary.withAlpha(70),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -75,8 +77,8 @@ class _AccountViewState extends State<AccountView> {
                     SizedBox(width: 12),
                     Text(
                       Currentuser.loggedUser!.seeingPatients
-                          ? 'your account is visible as doctor'
-                          : 'you are on the platform as a patient',
+                          ? locale.docAcc
+                          : locale.patAcc,
                     ),
                   ],
                 ),
@@ -88,12 +90,12 @@ class _AccountViewState extends State<AccountView> {
                     setState(() {}); // Refresh UI
                   });
                 },
-                child: Text('Update Profile'),
+                child: Text(locale.editProfile),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/settings'),
                 child: Text(
-                  'Settings',
+                  locale.settings,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
@@ -110,7 +112,7 @@ class _AccountViewState extends State<AccountView> {
       width: double.infinity,
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withAlpha(100),
+        color: Theme.of(context).colorScheme.primary.withAlpha(135),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -122,14 +124,16 @@ class _AccountViewState extends State<AccountView> {
               borderRadius: BorderRadius.circular(12),
               color: Theme.of(context).colorScheme.primary,
             ),
-            child: Icon(icon),
+            child: Icon(icon, color: Colors.white),
           ),
           SizedBox(width: 20),
           Expanded(
             child: Text(
               data,
               textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium!.copyWith(color: Colors.white),
             ),
           ),
         ],

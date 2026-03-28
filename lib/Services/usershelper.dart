@@ -6,6 +6,7 @@ class UsersHelper {
   static List<UsersModel> users = [];
 
   static Future getUsers() async {
+    users.clear();
     final db = Service.database;
     if (db != null) {
       final List<Map<String, dynamic>> mapResult = await db.query(_tableName);

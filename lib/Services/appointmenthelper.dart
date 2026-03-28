@@ -17,15 +17,12 @@ class AppointmentHelper {
     return [];
   }
 
-  static Future<void> addAppointment(AppointmentModel appointment) async {
+  static Future<int> addAppointment(AppointmentModel appointment) async {
     final db = Service.database;
     if (db != null) {
-      await db.insert(
-        Service.appointmentsTable,
-        appointment.toMap(),
-        // conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      return await db.insert(Service.appointmentsTable, appointment.toMap());
     }
+    return -1;
   }
 
   static Future<void> updateAppointment(AppointmentModel appointment) async {

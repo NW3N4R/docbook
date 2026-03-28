@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class UsersModel {
   final int id;
   final String fullName;

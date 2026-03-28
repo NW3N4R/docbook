@@ -1,19 +1,27 @@
+import 'package:docbook/Services/localeprovider.dart';
 import 'package:docbook/Services/themeprovider.dart';
 import 'package:docbook/Views/account.dart';
 import 'package:docbook/Views/appointmentsview.dart';
+import 'package:docbook/Views/doctorslistview.dart';
 import 'package:docbook/Views/home.dart';
 import 'package:docbook/Views/login.dart';
+import 'package:docbook/Views/settingsview.dart';
 import 'package:docbook/Views/signup.dart';
 import 'package:docbook/Views/updateprofile.dart';
 import 'package:docbook/customWidgets/navbuttons.dart';
+import 'package:docbook/l10n/app_localizations.dart';
 import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ThemeProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+      ],
       child: MyApp(),
     ),
   );
@@ -25,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    // final localeProvider = Provider.of<LocaleProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
       initialRoute: '/',
@@ -33,24 +41,22 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginView(),
         '/register': (context) => Signup(),
         '/main': (context) => MainApp(),
-        // '/account': (context) => Customizations(),
-        // '/post': (context) => PostItemView(),
         '/updateProfile': (context) => UpdateProfile(),
-        // '/about': (context) => About(),
-        // '/settings': (context) => Settings(),
+        '/settings': (context) => SettingsView(),
+        '/appointments': (context) => AppointmentsView(),
       },
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
       themeMode: themeProvider.themeMode,
-      // locale: localeProvider.locale,
-      // supportedLocales: const [Locale('en', 'US'), Locale('ar')],
-      // localizationsDelegates: [
-      //   AppLocalizations.delegate,
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
+      locale: localeProvider.locale,
+      supportedLocales: const [Locale('en', 'US'), Locale('ar')],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }
@@ -74,7 +80,7 @@ class _MainAppState extends State<MainApp> {
     super.initState();
   }
 
-  List<Widget> pages = [AppointmentsView(), HomeView(), AccountView()];
+  List<Widget> pages = [Doctorslistview(), HomeView(), AccountView()];
   int currentPage = 1;
   @override
   Widget build(BuildContext context) {

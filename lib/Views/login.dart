@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:docbook/Services/main_service.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/fields.dart';
+import 'package:docbook/l10n/app_localizations.dart';
 import 'package:docbook/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,6 +37,7 @@ class _LoginView extends State<LoginView> {
   bool isObsecure = true;
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     return Scaffold(
       body: SafeArea(
@@ -90,7 +92,7 @@ class _LoginView extends State<LoginView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           buildTextField(
-                            'Phone',
+                            locale!.phone,
                             TextInputType.phone,
                             phonector,
                             context,
@@ -98,7 +100,7 @@ class _LoginView extends State<LoginView> {
                           ),
                           SizedBox(height: 15),
                           buildTextField(
-                            'Password',
+                            locale.yourSecurePassword,
                             TextInputType.visiblePassword,
                             passctor,
                             context,
@@ -129,7 +131,7 @@ class _LoginView extends State<LoginView> {
                               ),
                               onPressed: login,
                               child: Text(
-                                'Login',
+                                locale.login,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 24,
@@ -148,7 +150,7 @@ class _LoginView extends State<LoginView> {
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/register'),
                   child: Text(
-                    'Dont have and account?',
+                    locale.createAnAccount,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -160,13 +162,14 @@ class _LoginView extends State<LoginView> {
   }
 
   void login() async {
+    final locale = AppLocalizations.of(context);
     bool didLogin = await Currentuser.login(phonector.text, passctor.text);
     if (didLogin) {
       Navigator.pushReplacementNamed(context, '/main');
     } else {
       showToast(
-        'Failed',
-        'incorrect phone or password',
+       locale!.errorHappened ,
+        locale.incorrectPassOrPhone,
         ToastificationType.error,
         context,
       );
