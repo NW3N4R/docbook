@@ -15,10 +15,10 @@ class _AccountViewState extends State<AccountView> {
     super.initState();
   }
 
-  List<String> genderList = ["male", "female"];
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+    List<String> genderList = [locale!.male, locale.female];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -59,7 +59,9 @@ class _AccountViewState extends State<AccountView> {
                       Icons.location_on,
                     ),
                     infoCard(
-                      genderList[Currentuser.loggedUser!.gender],
+                      Currentuser.loggedUser!.gender >= 0
+                          ? genderList[Currentuser.loggedUser!.gender]
+                          : "-",
                       Icons.male,
                     ),
                   ],

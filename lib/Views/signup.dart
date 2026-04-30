@@ -20,7 +20,6 @@ class _SignupState extends State<Signup> {
   final professionCtor = TextEditingController();
   final addressCtor = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  List<String> genderList = ["male", "female"];
   int gender = 0;
   bool isObsecure = true, isDoctor = false;
   IconData obsecureIcon = Icons.remove_red_eye;
@@ -28,6 +27,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     final locale = AppLocalizations.of(context);
+    List<String> genderList = [locale!.male, locale.female];
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -218,6 +218,9 @@ class _SignupState extends State<Signup> {
                             context,
                             (value) {
                               gender = genderList.indexOf(value!);
+                              print(
+                                'selected $gender as index and value is $value',
+                              );
                             },
                             prefixIcon: Icons.male,
                             fillColor: Theme.of(
@@ -253,7 +256,7 @@ class _SignupState extends State<Signup> {
   }
 
   Future signup() async {
-        final locale = AppLocalizations.of(context);
+    final locale = AppLocalizations.of(context);
 
     if (formKey.currentState!.validate()) {
       var model = UsersModel(
@@ -266,7 +269,7 @@ class _SignupState extends State<Signup> {
         addressCtor.text,
         gender,
       );
-
+      print(model.gender);
       int id = await UsersHelper.insertUser(model);
       if (id > 0) {
         showToast(

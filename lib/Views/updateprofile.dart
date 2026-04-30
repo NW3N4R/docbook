@@ -23,7 +23,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isObsecure = true, isDoctor = false;
   IconData obsecureIcon = Icons.remove_red_eye;
-  List<String> genderList = ["male", "female"];
+  
   int gender = Currentuser.loggedUser!.gender;
   @override
   void initState() {
@@ -41,6 +41,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+    List<String> genderList = [locale!.male, locale.female];
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

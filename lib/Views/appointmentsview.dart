@@ -97,7 +97,7 @@ class _AppointmentsViewState extends State<AppointmentsView> {
                   subtitle: Text(
                     '${currentAppoint.appointmentDate} ${currentAppoint.appointmentTime}\n${user.phone}${currentAppoint.notes != null ? "\n${currentAppoint.notes}" : ""}',
                   ),
-                  trailing: PopupMenuButton(
+                  trailing:currentAppoint.patientId == Currentuser.loggedUser!.id ? null :  PopupMenuButton(
                     onSelected: (value) async {
                       var model = AppointmentModel(
                         id: currentAppoint.id,
