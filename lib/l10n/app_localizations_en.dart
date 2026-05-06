@@ -241,4 +241,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reject => 'Reject';
+
+  @override
+  String get id => 'ID Number';
+
+  @override
+  String get phoneCall => 'Make Phone Call';
+
+  @override
+  String get profileDetails => 'Profile Details';
+
+  @override
+  String get profile => 'Profile';
 }

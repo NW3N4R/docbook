@@ -241,4 +241,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reject => 'وەرنەگرتن';
+
+  @override
+  String get id => 'پێناس';
+
+  @override
+  String get phoneCall => 'پەیوەندی کردن';
+
+  @override
+  String get profileDetails => 'زانیاری کەسی';
+
+  @override
+  String get profile => 'پرۆفایل';
 }

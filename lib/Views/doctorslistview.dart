@@ -2,6 +2,7 @@ import 'package:docbook/Models/appointmentsmodel.dart';
 import 'package:docbook/Models/usersmodel.dart';
 import 'package:docbook/Services/appointmenthelper.dart';
 import 'package:docbook/Services/usershelper.dart';
+import 'package:docbook/Views/profile.dart';
 import 'package:docbook/currentuser.dart';
 import 'package:docbook/customWidgets/fields.dart';
 import 'package:docbook/l10n/app_localizations.dart';
@@ -70,6 +71,13 @@ class _DoctorslistviewState extends State<Doctorslistview> {
               trailing: PopupMenuButton(
                 onSelected: (String selectedValue) {
                   if (selectedValue == '0') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DoctorProfile(user: currentDoc),
+                      ),
+                    );
+                  } else if (selectedValue == '1') {
                     setAppointment(currentDoc.id);
                   }
                 },
@@ -80,6 +88,13 @@ class _DoctorslistviewState extends State<Doctorslistview> {
                 itemBuilder: (BuildContext context) => [
                   PopupMenuItem(
                     value: '0',
+                    child: ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text(locale!.profile),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: '1',
                     child: ListTile(
                       leading: Icon(Icons.calendar_month),
                       title: Text(locale.reqAppointMent),
@@ -194,7 +209,7 @@ class _DoctorslistviewState extends State<Doctorslistview> {
                             }
                           }
                         },
-                        child: Text(locale.sendRequest,),
+                        child: Text(locale.sendRequest),
                       ),
                     ],
                   ),
@@ -257,7 +272,7 @@ class _DoctorslistviewState extends State<Doctorslistview> {
                             addCtor.clear();
                             phoneCtor.clear();
                           },
-                          child: Text(locale.clean,),
+                          child: Text(locale.clean),
                         ),
                         ElevatedButton.icon(
                           onPressed: () async {
@@ -268,7 +283,8 @@ class _DoctorslistviewState extends State<Doctorslistview> {
                                       user.seeingPatients &&
                                       user.fullName.contains(nameCtor.text) &&
                                       user.address.contains(addCtor.text) &&
-                                      (user.phone == phoneCtor.text || phoneCtor.text.isEmpty),
+                                      (user.phone == phoneCtor.text ||
+                                          phoneCtor.text.isEmpty),
                                 )
                                 .toList();
                             // setModalState(() {});

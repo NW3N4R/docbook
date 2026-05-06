@@ -79,5 +79,9 @@
   "nextAppointments": "دیداری داهاتوو",
   "myAppointments": "دیدارەکانم",
   "welcomeBack":"بەخێر بێیتەوە",
-  "reject": "وەرنەگرتن"
+  "reject": "وەرنەگرتن",
+  "id":"پێناس",
+  "phoneCall":"پەیوەندی کردن",
+  "profileDetails":"زانیاری کەسی",
+  "profile":"پرۆفایل"
   }

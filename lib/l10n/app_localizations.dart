@@ -562,6 +562,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reject'**
   String get reject;
+
+  /// No description provided for @id.
+  ///
+  /// In en, this message translates to:
+  /// **'ID Number'**
+  String get id;
+
+  /// No description provided for @phoneCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Make Phone Call'**
+  String get phoneCall;
+
+  /// No description provided for @profileDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Details'**
+  String get profileDetails;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
